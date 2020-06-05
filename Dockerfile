@@ -1,10 +1,16 @@
 FROM alpine:edge
 
-RUN apk add --no-cache libgcc libstdc++ musl hugo git
+RUN apk add --no-cache libgcc libstdc++ musl hugo git openssh-client
 
-RUN mkdir -p /tmp/source
-RUN mkdir -p /tmp/dest
+RUN true \
+  && mkdir /root/.ssh \
+  && echo "Host *" >> /root/.ssh/config \
+  && echo "  BatchMode=yes" >> /root/.ssh/config \
+  && echo "  StrictHostKeyChecking=accept-new" >> /root/.ssh/config \
+  && echo "  IdentityFile ~/.ssh/id_rsa" >> /root/.ssh/config \
+  && chown -R root:root /root/.ssh \
+  && chmod -R go= /root/.ssh
 
-WORKDIR /tmp/source
+COPY update-site /etc/periodic/daily/update-site
 
-ENTRYPOINT ["/usr/bin/hugo", "-D", "-d", "/tmp/dest", "--cleanDestinationDir"]
+CMD ["/usr/sbin/crond", "-f", "-d", "8"]

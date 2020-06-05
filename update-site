@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]; then
+case "$(git -C /tmp/src pull --ff-only)" in
+*Already\ up\ to\ date*) echo "nothing to do" && exit 0 ;;
+*       ) echo updating ;;
+esac
+else
+  git -C /tmp/src pull --ff-only
+fi
+
+/usr/bin/hugo -s /tmp/src -d /tmp/dst -D --cleanDestinationDir
