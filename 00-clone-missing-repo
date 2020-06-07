@@ -1,0 +1,15 @@
+#!/usr/bin/execlineb -P
+
+with-contenv
+
+importas repo_url REPO_URL
+
+foreground {
+  if -n { redirfd -w 2 /dev/null redirfd -w 1 /dev/null git ls-remote /run/src }
+
+  git -C /run/src clone --recurse-submodules "${repo_url}" .
+}
+
+/etc/periodic/daily/update-site -f
+
+echo Repo is up and running
