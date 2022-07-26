@@ -7,6 +7,7 @@ case "$(git -C /run/src pull --ff-only)" in
 esac
 else
   git -C /run/src pull --ff-only
+  git -C /run/src lfs pull
 fi
 
 /usr/bin/hugo -s /run/src -d /run/dst -D --cleanDestinationDir
