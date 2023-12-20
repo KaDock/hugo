@@ -1,4 +1,4 @@
-FROM kadock/s6:edge
+FROM ghcr.io/kadock/s6:latest
 
 RUN apk add --no-cache libgcc libstdc++ musl hugo git openssh-client git-lfs
 
